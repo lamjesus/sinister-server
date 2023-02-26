@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "ts-node-dev src/Server/Server.ts",
+    "dev": "ts-node-dev src/app.ts",
     "start": "node dist/app.js",
-    "server": "node dist/Server.js"
+    "server": "node dist/server/Server.js"
   },
   "keywords": [],
   "author": "",

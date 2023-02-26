@@ -1,30 +1,10 @@
-const http = require('http');
+import http from 'http'
 
-class CheckPort {
-    constructor(private port){
+export class CheckPort {
+    private port: number;
+    constructor(port:number){
         this.port = port
     }
 
-    async isPortFree(){
-        try {
-            await new Promise((resolve, reject) => {
-                const server = http.createServer();
-                server.once('error', err => {
-                  if (err.code === 'EADDRINUSE') {
-                    resolve(false);
-                  } else {
-                    reject(err);
-                  }
-                });
-                server.once('listening', () => {
-                  server.close();
-                  resolve(true);
-                });
-                server.listen(this.port);
-              });
-              return true;
-        } catch (error) {
-            
-        }
-    }
+    
 }
