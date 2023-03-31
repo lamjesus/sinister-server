@@ -1,20 +1,26 @@
 import http from 'http'
 import { Router } from '../Router/Router';
+import { IncomingMessage, ServerResponse } from 'http'
 
-export class Server extends Router {
+interface Handler {
+  (req: IncomingMessage, res: ServerResponse, params: Record<string, any>): void
+}
+interface Route {
+  method: string
+  cb: Handler
+}
+
+export class Server {
+  private router: Router
   constructor(private port: number, private hostname: string) {
-    super()
+    this.router = new Router()
     this.port = port
     this.hostname = hostname
   }
 
   initServer() {
     const server = http.createServer((req, res) => {
-      const server = http.createServer()
-      //res.statusCode = 200
-      // res.setHeader('Content-Type', 'text/plain')
-      // res.end('Hello, Fucking World!\n')
-      this.handle(req,res)
+      this.router.handle(req, res)
       server.once('error', (err: any) => {
         if (err.code === 'EADDRINUSE') {
           throw new Error('puerto en uso')
@@ -28,28 +34,19 @@ export class Server extends Router {
       console.log('inicia el servidor en el puerto ', this.port)
     })
   }
+  get(path: string, cb: Handler) {
+    this.router.get(path, cb)
+  }
+
+  post(path: string, cb: Handler) {
+    this.router.post(path, cb)
+  }
+
+  put(path: string, cb: Handler) {
+    this.router.put(path, cb)
+  }
+
+  delete(path: string, cb: Handler) {
+    this.router.delete(path, cb)
+  }
 }
-
-// check port
-// private async isPortFree() {
-//     try {
-//         await new Promise((resolve, reject) => {
-//             const server = http.createServer();
-//             server.once('error', (err: any) => {
-//                 if (err.code === 'EADDRINUSE') {
-//                    throw new Error('puerto en uso')
-//                 } else {
-//                     reject(err);
-//                 }
-//             });
-//             server.once('listening', () => {
-//                 server.close();
-//                 resolve(true);
-//             });
-//             server.listen(this.port);
-//         });
-//         return true;
-//     } catch (error) {
-
-//     }
-// }
